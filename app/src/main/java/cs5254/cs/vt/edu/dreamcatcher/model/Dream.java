@@ -22,7 +22,7 @@ public class Dream {
         mRealized = false;
         mDeferred = false;
         mDreamEntries = new ArrayList<>();
-        // add "Dream Revealed" entry
+        addDreamRevealed();
     }
 
     // getters
@@ -68,20 +68,26 @@ public class Dream {
     // convenience methods
 
     public void addComment(String text) {
-        DreamEntry entry = new DreamEntry(text, new Date(), DreamEntryKind.COMMENT);
+        DreamEntry entry = new DreamEntry(text, new Date(),
+                DreamEntryKind.COMMENT);
         mDreamEntries.add(entry);
     }
 
     public void addDreamRealized() {
-        DreamEntry entry = new DreamEntry("Dream Realized", new Date(), DreamEntryKind.REALIZED);
+        DreamEntry entry = new DreamEntry("Dream Realized", new Date(),
+                DreamEntryKind.REALIZED);
         mDreamEntries.add(entry);
-//        setRealized(true);
     }
 
     public void addDreamDeferred() {
-        DreamEntry entry = new DreamEntry("Dream Deferred", new Date(), DreamEntryKind.DEFERRED);
+        DreamEntry entry = new DreamEntry("Dream Deferred", new Date(),
+                DreamEntryKind.DEFERRED);
         mDreamEntries.add(entry);
-//        setDeferred(true);
+    }
+
+    public void addDreamRevealed() {
+        DreamEntry entry = new DreamEntry("Dream Revealed", new Date(),
+                DreamEntryKind.REVEALED);
     }
 
     // Consider consolidating further into a method
@@ -115,12 +121,14 @@ public class Dream {
 
     public void selectDreamRealized() {
         removeDreamDeferred();
+        setDeferred(false);
         addDreamRealized();
         setRealized(true);
     }
 
     public void selectDreamDeferred() {
         removeDreamRealized();
+        setRealized(false);
         addDreamDeferred();
         setDeferred(true);
     }

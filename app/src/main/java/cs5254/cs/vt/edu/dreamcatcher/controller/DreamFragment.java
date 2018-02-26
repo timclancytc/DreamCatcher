@@ -26,7 +26,9 @@ import cs5254.cs.vt.edu.dreamcatcher.model.DreamLab;
 
 public class DreamFragment extends Fragment {
 
+    private static final int REVEALED_COLOR = 0xff999f00;
     private static final int REALIZED_COLOR = 0xff008f00;
+    private static final int DEFERRED_COLOR = 0xff010f99;
     private static final int COMMENT_COLOR = 0xffffd479;
     private static String ARG_CRIME_ID = "crime_id";
 
@@ -54,8 +56,8 @@ public class DreamFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        UUID crimeId = (UUID) getArguments().getSerializable(ARG_CRIME_ID);
-        mDream = DreamLab.getInstance(getActivity()).getCrime(crimeId);
+        UUID dreamId = (UUID) getArguments().getSerializable(ARG_CRIME_ID);
+        mDream = DreamLab.getInstance(getActivity()).getDream(dreamId);
     }
 
     @Nullable
@@ -88,7 +90,7 @@ public class DreamFragment extends Fragment {
         mRealizedCheckBox.setOnCheckedChangeListener((compoundButton, b) -> {
             if (b) {
                 // add the DR message
-                if (!mDream.isRealized()) { mDream.addDreamRealized(); }
+                if (!mDream.isRealized()) { mDream.selectDreamRealized(); }
             } else {
                 // remove the DR message
                 if (mDream.isRealized()) { mDream.removeDreamRealized(); }
@@ -101,11 +103,13 @@ public class DreamFragment extends Fragment {
         mDeferredCheckBox.setOnCheckedChangeListener((compoundButton, c) -> {
             if (c) {
                 //Add deferred message
-                if (!mDream.isDeferred()) {mDream.addDreamDeferred();}
+                if (!mDream.isDeferred()) {mDream.selectDreamDeferred();}
             } else {
                 //Remove deferred message
                 if (mDream.isDeferred()) {mDream.removeDreamDeferred();}
             }
+            mDream.setDeferred(c);
+            refreshView();
         });
 
         mEntryButton0 = view.findViewById(R.id.dream_entry_0);
@@ -131,10 +135,23 @@ public class DreamFragment extends Fragment {
         mRealizedCheckBox.setChecked(mDream.isRealized());
         mDeferredCheckBox.setChecked(mDream.isDeferred());
 
+        refreshCheckboxEnabled();
+
         refreshEntryButtons();
         List<DreamEntry> entries = mDream.getDreamEntries();
         for (DreamEntry e : entries) {
             Log.d("refreshView", e.getText());
+        }
+    }
+
+    private void refreshCheckboxEnabled() {
+        mRealizedCheckBox.setEnabled(true);
+        mDeferredCheckBox.setEnabled(true);
+        if (mDream.isDeferred()) {
+            mRealizedCheckBox.setEnabled(false);
+        }
+        if (mDream.isRealized()) {
+            mDeferredCheckBox.setEnabled(false);
         }
     }
 
@@ -160,10 +177,12 @@ public class DreamFragment extends Fragment {
         // set text
         switch (entry.getKind()) {
             case REVEALED:
-                // do something
+                setRevealedStyle(button);
+                button.setText(entry.getText());
                 break;
             case DEFERRED:
-                // do something
+                setDeferredStyle(button);
+                button.setText(entry.getText());
                 break;
             case REALIZED:
                 setRealizedStyle(button);
@@ -177,8 +196,18 @@ public class DreamFragment extends Fragment {
         }
     }
 
+    private void setRevealedStyle(Button button) {
+        button.getBackground().setColorFilter(REVEALED_COLOR, PorterDuff.Mode.MULTIPLY);
+        button.setTextColor(Color.WHITE);
+    }
+
     private void setRealizedStyle(Button button) {
         button.getBackground().setColorFilter(REALIZED_COLOR, PorterDuff.Mode.MULTIPLY);
+        button.setTextColor(Color.WHITE);
+    }
+
+    private void setDeferredStyle(Button button) {
+        button.getBackground().setColorFilter(DEFERRED_COLOR, PorterDuff.Mode.MULTIPLY);
         button.setTextColor(Color.WHITE);
     }
 

@@ -4,4 +4,10 @@
     <string name="dream_title_hint">Dream Title Hint</string>
     <string name="dream_journey_label">Dream Journey</string>
     <string name="dream_solved_label">Dream Solved Label</string>
+    <string name="dream_title">Dream Title</string>
+    <string name="dream_date">Dream Date</string>
+    <string name="realized_dream_content_description">Image for Realized Dream</string>
+    <string name="deferred_dream_content_description">Image for Deferred Dream</string>
+    <string name="realized_checkbox">Realized</string>
+    <string name="deferred_checkbox">Deferred</string>
 </resources>

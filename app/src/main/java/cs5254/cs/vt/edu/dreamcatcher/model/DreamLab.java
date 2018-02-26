@@ -41,20 +41,20 @@ public class DreamLab {
         for (int i = 2; i < 20; i++) {
             Dream dream = new Dream();
             dream.setTitle("Dream #" + i);
-            if (i % 4 == 0) {
+            if (i % 3 == 0) {
                 dream.selectDreamRealized();
             }
             if (i % 2 == 0) {
                 dream.selectDreamDeferred();
             }
-            dream.setRealized(i % 2 == 0); // Every other one
+            //dream.setRealized(i % 2 == 0); // Every other one
             mDreams.add(dream);
         }
     }
 
     public List<Dream> getDreams() { return mDreams; }
 
-    public Dream getCrime(UUID id) {
+    public Dream getDream(UUID id) {
         for (Dream dream : mDreams) {
             if (dream.getId().equals(id)) { return dream; }
         }
