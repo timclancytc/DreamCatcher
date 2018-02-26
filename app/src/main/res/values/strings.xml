@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">DreamCatcher</string>
+    <string name="dream_title_label">Dream Title</string>
+    <string name="dream_title_hint">Dream Title Hint</string>
+    <string name="dream_journey_label">Dream Journey</string>
+    <string name="dream_solved_label">Dream Solved Label</string>
 </resources>
