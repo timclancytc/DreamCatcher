@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="cs5254.cs.vt.edu.dreamcatcher">
+    package="cs5254.cs.vt.edu.dreamcatcherp2">
 
     <application
         android:allowBackup="true"
@@ -9,14 +9,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".controller.DreamListActivity">
+        <activity android:name="cs5254.cs.vt.edu.dreamcatcherp2.controller.DreamListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".controller.DreamActivity">
+        <activity android:name="cs5254.cs.vt.edu.dreamcatcherp2.controller.DreamActivity">
         </activity>
     </application>
 

@@ -1,14 +1,10 @@
-package cs5254.cs.vt.edu.dreamcatcher.controller;
+package cs5254.cs.vt.edu.dreamcatcherp2.controller;
 
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 
 import java.util.UUID;
-
-import cs5254.cs.vt.edu.dreamcatcher.R;
 
 public class DreamActivity extends SingleFragmentActivity {
 

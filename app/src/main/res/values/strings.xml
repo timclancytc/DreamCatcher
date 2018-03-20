@@ -10,4 +10,9 @@
     <string name="deferred_dream_content_description">Image for Deferred Dream</string>
     <string name="realized_checkbox">Realized</string>
     <string name="deferred_checkbox">Deferred</string>
+    <string name="dialog_hint">New Dream Entry</string>
+    <string name="new_dream">New Dream</string>
+    <string name="show_subtitle">Show Subtitle</string>
+    <string name="hide_subtitle">Hide Subtitle</string>
+    <string name="subtitle_format">%1$d dreams</string>
 </resources>

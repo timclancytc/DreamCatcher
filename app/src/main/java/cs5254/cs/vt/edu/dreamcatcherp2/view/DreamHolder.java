@@ -1,4 +1,4 @@
-package cs5254.cs.vt.edu.dreamcatcher.view;
+package cs5254.cs.vt.edu.dreamcatcherp2.view;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,11 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import cs5254.cs.vt.edu.dreamcatcher.R;
-import cs5254.cs.vt.edu.dreamcatcher.controller.DreamActivity;
-import cs5254.cs.vt.edu.dreamcatcher.model.Dream;
+import java.text.DateFormat;
+
+import cs5254.cs.vt.edu.dreamcatcherp2.R;
+import cs5254.cs.vt.edu.dreamcatcherp2.controller.DreamActivity;
+import cs5254.cs.vt.edu.dreamcatcherp2.model.Dream;
 
 
 public class DreamHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -26,6 +27,9 @@ public class DreamHolder extends RecyclerView.ViewHolder implements View.OnClick
     private ImageView mDreamRealizedView;
     private ImageView mDreamDeferredView;
 
+    //context
+    private Context context;
+
     public DreamHolder(LayoutInflater inflater, ViewGroup parent) {
         super(inflater.inflate(R.layout.list_item_dream, parent, false));
         itemView.setOnClickListener(this);
@@ -33,12 +37,15 @@ public class DreamHolder extends RecyclerView.ViewHolder implements View.OnClick
         mDateTextView = itemView.findViewById(R.id.dream_date);
         mDreamRealizedView = itemView.findViewById(R.id.dream_realized_view);
         mDreamDeferredView = itemView.findViewById(R.id.dream_deferred_view);
+        context = parent.getContext();
     }
 
-    public void bind(Dream Dream) {
-        mDream = Dream;
+    public void bind(Dream dream) {
+        mDream = dream;
         mTitleTextView.setText(mDream.getTitle());
-        mDateTextView.setText(mDream.getRevealedDate().toString());
+        DateFormat dateFormat = android.text.format.DateFormat
+                .getMediumDateFormat(context);
+        mDateTextView.setText(dateFormat.format(mDream.getRevealedDate()));
         mDreamRealizedView.setVisibility(mDream.isRealized() ? View.VISIBLE : View.GONE);
         mDreamDeferredView.setVisibility(mDream.isDeferred() ? View.VISIBLE : View.GONE);
 

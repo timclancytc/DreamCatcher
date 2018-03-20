@@ -1,4 +1,4 @@
-package cs5254.cs.vt.edu.dreamcatcher.controller;
+package cs5254.cs.vt.edu.dreamcatcherp2.controller;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -6,7 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 
-import cs5254.cs.vt.edu.dreamcatcher.R;
+import cs5254.cs.vt.edu.dreamcatcherp2.R;
 
 public abstract class SingleFragmentActivity extends AppCompatActivity {
 

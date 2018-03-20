@@ -1,4 +1,4 @@
-package cs5254.cs.vt.edu.dreamcatcher.view;
+package cs5254.cs.vt.edu.dreamcatcherp2.view;
 
 
 import android.support.v7.widget.RecyclerView;
@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
-import cs5254.cs.vt.edu.dreamcatcher.model.Dream;
+import cs5254.cs.vt.edu.dreamcatcherp2.model.Dream;
 
 
 
@@ -35,6 +35,10 @@ public class DreamAdapter extends RecyclerView.Adapter<DreamHolder> {
     @Override
     public int getItemCount() {
         return mDreams.size();
+    }
+
+    public void setDreams(List<Dream> dreams) {
+        mDreams = dreams;
     }
 }
 

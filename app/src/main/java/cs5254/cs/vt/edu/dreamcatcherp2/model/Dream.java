@@ -1,4 +1,4 @@
-package cs5254.cs.vt.edu.dreamcatcher.model;
+package cs5254.cs.vt.edu.dreamcatcherp2.model;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,6 +17,16 @@ public class Dream {
 
     public Dream() {
         mId = UUID.randomUUID();
+        mTitle = null;
+        mRevealedDate = new Date();
+        mRealized = false;
+        mDeferred = false;
+        mDreamEntries = new ArrayList<>();
+        addDreamRevealed();
+    }
+
+    public Dream(UUID uuid) {
+        mId = uuid;
         mTitle = null;
         mRevealedDate = new Date();
         mRealized = false;
@@ -131,5 +141,13 @@ public class Dream {
         setRealized(false);
         addDreamDeferred();
         setDeferred(true);
+    }
+
+    public void setDate(Date date) {
+        mRevealedDate = date;
+    }
+
+    public void setDreamEntries(List<DreamEntry> entries) {
+        mDreamEntries = entries;
     }
 }

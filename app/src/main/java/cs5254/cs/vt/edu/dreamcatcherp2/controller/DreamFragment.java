@@ -1,11 +1,15 @@
-package cs5254.cs.vt.edu.dreamcatcher.controller;
+package cs5254.cs.vt.edu.dreamcatcherp2.controller;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -16,13 +20,15 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
+import java.text.DateFormat;
 import java.util.List;
 import java.util.UUID;
 
-import cs5254.cs.vt.edu.dreamcatcher.R;
-import cs5254.cs.vt.edu.dreamcatcher.model.Dream;
-import cs5254.cs.vt.edu.dreamcatcher.model.DreamEntry;
-import cs5254.cs.vt.edu.dreamcatcher.model.DreamLab;
+import cs5254.cs.vt.edu.dreamcatcherp2.R;
+import cs5254.cs.vt.edu.dreamcatcherp2.model.Dream;
+import cs5254.cs.vt.edu.dreamcatcherp2.model.DreamEntry;
+import cs5254.cs.vt.edu.dreamcatcherp2.model.DreamLab;
+import cs5254.cs.vt.edu.dreamcatcherp2.model.DreamEntryLab;
 
 public class DreamFragment extends Fragment {
 
@@ -30,7 +36,9 @@ public class DreamFragment extends Fragment {
     private static final int REALIZED_COLOR = 0xff008f00;
     private static final int DEFERRED_COLOR = 0xff010f99;
     private static final int COMMENT_COLOR = 0xffffd479;
-    private static String ARG_CRIME_ID = "crime_id";
+    private static final String DIALOG_ADD_DREAM_ENTRY = "Dialog_Add_Dream_Entry";
+    private static final int REQUEST_COMMENT = 0; //TODO update number
+    private static String ARG_DREAM_ID = "dream_id";
 
     // model fields
     private Dream mDream;
@@ -44,10 +52,11 @@ public class DreamFragment extends Fragment {
     private Button mEntryButton2;
     private Button mEntryButton3;
     private Button mEntryButton4;
+    private FloatingActionButton mAddCommentFAB;
 
-    public static DreamFragment newInstance(UUID crimeId) {
+    public static DreamFragment newInstance(UUID dreamId) {
         Bundle args = new Bundle();
-        args.putSerializable(ARG_CRIME_ID, crimeId);
+        args.putSerializable(ARG_DREAM_ID, dreamId);
         DreamFragment fragment = new DreamFragment();
         fragment.setArguments(args);
         return fragment;
@@ -56,7 +65,7 @@ public class DreamFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        UUID dreamId = (UUID) getArguments().getSerializable(ARG_CRIME_ID);
+        UUID dreamId = (UUID) getArguments().getSerializable(ARG_DREAM_ID);
         mDream = DreamLab.getInstance(getActivity()).getDream(dreamId);
     }
 
@@ -123,10 +132,42 @@ public class DreamFragment extends Fragment {
         mEntryButton4 = view.findViewById(R.id.dream_entry_4);
         mEntryButton4.setEnabled(false);
 
+        mAddCommentFAB = view.findViewById(R.id.add_comment_fab);
+        mAddCommentFAB.setOnClickListener(
+                v -> {
+                    FragmentManager manager = DreamFragment.this.getFragmentManager();
+                    AddDreamEntryFragment dialog = new AddDreamEntryFragment();
+                    dialog.setTargetFragment(
+                            DreamFragment.this, REQUEST_COMMENT);
+                    dialog.show(manager, DIALOG_ADD_DREAM_ENTRY);
+                    });
+
         refreshView();
 
         return view;
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        if (resultCode != Activity.RESULT_OK) {return;}
+
+        if (requestCode == REQUEST_COMMENT) {
+            String comment = (String) intent.getSerializableExtra(
+                    AddDreamEntryFragment.EXTRA_COMMENT);
+            mDream.addComment(comment);
+            refreshEntryButtons();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        DreamLab.getInstance(getActivity())
+                .updateDream(mDream);
+        DreamEntryLab.getInstance(getActivity())
+                .updateDreamEntries(mDream);
+    }
+
 
     private void refreshView() {
         if (mDream.getTitle() != null) {
@@ -173,6 +214,15 @@ public class DreamFragment extends Fragment {
 
         button.setVisibility(View.VISIBLE);
         DreamEntry entry = mDream.getDreamEntries().get(position);
+
+        //Only show the 5 most recent dream entries
+        if (mDream.getDreamEntries().size() > 5)
+        {
+            int newPosition = mDream.getDreamEntries().size() - 5 + position;
+            entry = mDream.getDreamEntries().get(newPosition);
+        }
+
+
         // set style
         // set text
         switch (entry.getKind()) {
@@ -191,8 +241,9 @@ public class DreamFragment extends Fragment {
             case COMMENT:
                 setCommentStyle(button);
                 String text = entry.getText();
-                String date = entry.getDate().toString();
-                button.setText(text + " (" + date + ")");
+                DateFormat dateFormat = android.text.format.DateFormat
+                        .getMediumDateFormat(getContext());
+                button.setText(text + " (" + dateFormat.format(entry.getDate()) + ")");
         }
     }
 

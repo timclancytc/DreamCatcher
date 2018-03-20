@@ -1,4 +1,4 @@
-package cs5254.cs.vt.edu.dreamcatcher.controller;
+package cs5254.cs.vt.edu.dreamcatcherp2.controller;
 
 import android.support.v4.app.Fragment;
 
@@ -8,4 +8,6 @@ public class DreamListActivity extends SingleFragmentActivity {
     protected Fragment createFragment() {
         return new DreamListFragment();
     }
+
+
 }
