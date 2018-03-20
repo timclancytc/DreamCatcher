@@ -98,6 +98,7 @@ public class Dream {
     public void addDreamRevealed() {
         DreamEntry entry = new DreamEntry("Dream Revealed", new Date(),
                 DreamEntryKind.REVEALED);
+        mDreamEntries.add(entry);
     }
 
     // Consider consolidating further into a method

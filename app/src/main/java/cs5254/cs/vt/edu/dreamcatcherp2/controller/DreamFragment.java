@@ -10,10 +10,13 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -64,15 +67,36 @@ public class DreamFragment extends Fragment {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        Log.d("refreshView", "DreamFragment.onCreate()");
         super.onCreate(savedInstanceState);
         UUID dreamId = (UUID) getArguments().getSerializable(ARG_DREAM_ID);
         mDream = DreamLab.getInstance(getActivity()).getDream(dreamId);
+        setHasOptionsMenu(true);
     }
+
+        @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                if (mTitleField.getText().toString() == null ||
+                        mTitleField.getText().toString().equals("")) {
+                    Log.d("UpButton", "DreamFragment.onOptionsItemSelected in if");
+                    return true;
+                }
+                return super.onOptionsItemSelected(item);
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+
+        Log.d("refreshView", "DreamFragment.onCreateView()");
         View view = inflater.inflate(R.layout.fragment_dream, container, false);
 
         // initialize view fields
@@ -178,8 +202,10 @@ public class DreamFragment extends Fragment {
 
         refreshCheckboxEnabled();
 
-        refreshEntryButtons();
         List<DreamEntry> entries = mDream.getDreamEntries();
+        Log.d("refreshView", "entries" + entries.toString());
+        refreshEntryButtons();
+
         for (DreamEntry e : entries) {
             Log.d("refreshView", e.getText());
         }

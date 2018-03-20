@@ -16,7 +16,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="cs5254.cs.vt.edu.dreamcatcherp2.controller.DreamActivity">
+        <activity android:name="cs5254.cs.vt.edu.dreamcatcherp2.controller.DreamActivity"
+                    android:parentActivityName=".controller.DreamListActivity" >
         </activity>
     </application>
 

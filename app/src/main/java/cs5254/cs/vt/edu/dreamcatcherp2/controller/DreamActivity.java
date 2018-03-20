@@ -3,8 +3,13 @@ package cs5254.cs.vt.edu.dreamcatcherp2.controller;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
+import android.util.Log;
+import android.view.MenuItem;
 
 import java.util.UUID;
+
+import cs5254.cs.vt.edu.dreamcatcherp2.model.Dream;
+import cs5254.cs.vt.edu.dreamcatcherp2.model.DreamLab;
 
 public class DreamActivity extends SingleFragmentActivity {
 
@@ -21,5 +26,4 @@ public class DreamActivity extends SingleFragmentActivity {
         intent.putExtra(EXTRA_DREAM_ID, dreamId);
         return intent;
     }
-
 }

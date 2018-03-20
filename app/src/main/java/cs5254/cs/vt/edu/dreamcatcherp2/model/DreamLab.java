@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,14 +32,18 @@ public class DreamLab {
         mDatabase = new DreamBaseHelper(mContext).getWritableDatabase();
 
         //Create one dream with 5 dream entries for testing convenience
-        Dream dream0 = new Dream();
-        dream0.setTitle("My First Dream");
-        dream0.addComment("Comment 1");
-        dream0.addComment("Comment 2");
-        dream0.addComment("Comment 3");
-        dream0.addComment("Comment 4");
-        dream0.selectDreamRealized();
-        addDream(dream0);
+        List<Dream> existingDreams = getDreams();
+        if (existingDreams.size() == 0) {
+            Dream dream0 = new Dream();
+            dream0.setTitle("5 Entry Dream");
+            dream0.addComment("Comment 1");
+            dream0.addComment("Comment 2");
+            dream0.addComment("Comment 3");
+            dream0.addComment("Comment 4");
+            dream0.selectDreamRealized();
+            addDream(dream0);
+        }
+
 
     }
 
@@ -99,6 +104,7 @@ public class DreamLab {
     }
 
     public Dream getDream(UUID id) {
+        Log.d("refreshView", "DreamLab.getDream - UUID:" + id);
         DreamCursorWrapper cursor = queryDreams(
                 DreamDbSchema.DreamTable.Cols.UUID + " = ?",
                 new String[]{ id.toString() }
@@ -109,6 +115,7 @@ public class DreamLab {
             Dream dream = cursor.getDream();
             List<DreamEntry> entries =
                     DreamEntryLab.getInstance(mContext).getDreamEntries(dream);
+            Log.d("refreshView", "DreamLab.getDream - Entries: " + entries.toString());
             dream.setDreamEntries(entries);
             return dream;
         } finally {

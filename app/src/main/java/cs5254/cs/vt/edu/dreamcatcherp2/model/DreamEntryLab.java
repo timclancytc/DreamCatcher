@@ -31,16 +31,6 @@ public class DreamEntryLab {
         mContext = context.getApplicationContext();
         mDatabase = new DreamBaseHelper(mContext).getWritableDatabase();
 
-
-        Dream dream0 = new Dream();
-        dream0.setTitle("My First Dream");
-        dream0.addComment("Comment 1");
-        dream0.addComment("Comment 2");
-        dream0.addComment("Comment 3");
-        dream0.addComment("Comment 4");
-        dream0.selectDreamRealized();
-
-
     }
 
     public void addDreamEntry(DreamEntry entry, Dream dream) {
@@ -61,7 +51,10 @@ public class DreamEntryLab {
 
     public List<DreamEntry> getDreamEntries(Dream dream) {
         List<DreamEntry> dreamEntries = new ArrayList<>();
-        DreamEntryCursorWrapper cursor = queryDreamEntries(null, null);
+        String whereClause = DreamDbSchema.DreamEntryTable.Cols.UUID + "=?";
+        DreamEntryCursorWrapper cursor = queryDreamEntries(
+                whereClause,
+                new String[]{dream.getId().toString()});
         try {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
