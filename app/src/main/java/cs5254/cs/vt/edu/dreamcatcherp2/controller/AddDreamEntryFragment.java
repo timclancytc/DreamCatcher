@@ -25,7 +25,7 @@ public class AddDreamEntryFragment extends DialogFragment{
 
         return new AlertDialog.Builder(getActivity())
                 .setView(view)
-                .setTitle("Add Comment")
+                .setTitle(R.string.add_comment_title)
                 .setPositiveButton(
                         android.R.string.ok,
                         (dialog, which) -> {

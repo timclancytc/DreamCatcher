@@ -15,4 +15,7 @@
     <string name="show_subtitle">Show Subtitle</string>
     <string name="hide_subtitle">Hide Subtitle</string>
     <string name="subtitle_format">%1$d dreams</string>
+    <string name="add_comment_title">Add Comment</string>
+    <string name="need_title_title">Need a Title!</string>
+    <string name="need_title_message">Please add a title</string>
 </resources>

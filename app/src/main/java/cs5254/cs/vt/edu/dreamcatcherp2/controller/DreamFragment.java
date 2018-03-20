@@ -40,6 +40,7 @@ public class DreamFragment extends Fragment {
     private static final int DEFERRED_COLOR = 0xff010f99;
     private static final int COMMENT_COLOR = 0xffffd479;
     private static final String DIALOG_ADD_DREAM_ENTRY = "Dialog_Add_Dream_Entry";
+    private static final String DIALOG_ADD_TITLE = "Dialog_Add_Title";
     private static final int REQUEST_COMMENT = 0; //TODO update number
     private static String ARG_DREAM_ID = "dream_id";
 
@@ -81,6 +82,11 @@ public class DreamFragment extends Fragment {
                 if (mTitleField.getText().toString() == null ||
                         mTitleField.getText().toString().equals("")) {
                     Log.d("UpButton", "DreamFragment.onOptionsItemSelected in if");
+                    FragmentManager manager = DreamFragment.this.getFragmentManager();
+                    NeedTitleFragment dialog = new NeedTitleFragment();
+//                    dialog.setTargetFragment(
+//                            DreamFragment.this, REQUEST_COMMENT);
+                    dialog.show(manager, DIALOG_ADD_TITLE);
                     return true;
                 }
                 return super.onOptionsItemSelected(item);
