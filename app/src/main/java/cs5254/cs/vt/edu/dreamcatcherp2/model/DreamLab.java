@@ -49,7 +49,6 @@ public class DreamLab {
 
 
     public void addDream(Dream dream) {
-        Log.d("cancelCreate", "DreamLab.addDream");
         ContentValues values = getDreamValues(dream);
         mDatabase.insert(DreamDbSchema.DreamTable.NAME, null, values);
         for (DreamEntry entry : dream.getDreamEntries()) {
@@ -58,7 +57,6 @@ public class DreamLab {
     }
 
     public void updateDream(Dream dream) {
-        Log.d("cancelCreate", "DreamLab.updateDream");
         String uuidString = dream.getId().toString();
         ContentValues values = getDreamValues(dream);
         mDatabase.update(DreamDbSchema.DreamTable.NAME, values,
@@ -106,7 +104,6 @@ public class DreamLab {
     }
 
     public Dream getDream(UUID id) {
-        Log.d("refreshView", "DreamLab.getDream - UUID:" + id);
         DreamCursorWrapper cursor = queryDreams(
                 DreamDbSchema.DreamTable.Cols.UUID + " = ?",
                 new String[]{ id.toString() }
@@ -117,7 +114,6 @@ public class DreamLab {
             Dream dream = cursor.getDream();
             List<DreamEntry> entries =
                     DreamEntryLab.getInstance(mContext).getDreamEntries(dream);
-            Log.d("refreshView", "DreamLab.getDream - Entries: " + entries.toString());
             dream.setDreamEntries(entries);
             return dream;
         } finally {

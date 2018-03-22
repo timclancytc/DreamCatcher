@@ -65,13 +65,12 @@ public class DreamListFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Log.d("cancelCreate", "DreamListFragment.onOptionsItemSelected start");
         switch (item.getItemId()) {
             case R.id.new_dream:
                 Dream dream = new Dream();
-                Log.d("cancelCreate", "DreamListFragment.onOptionsItemSelected after new Dream");
+                // Don't add Dream to DB here, otherwise dream will still get added to the db even
+                // if you hit back
                 //DreamLab.getInstance(getActivity()).addDream(dream);
-                Log.d("cancelCreate", "DreamListFragment.onOptionsItemSelected after addDream");
                 Intent intent = DreamActivity
                         .newIntent(getActivity(), dream.getId());
                 startActivity(intent);

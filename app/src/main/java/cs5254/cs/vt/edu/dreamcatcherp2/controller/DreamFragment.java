@@ -68,16 +68,12 @@ public class DreamFragment extends Fragment {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        Log.d("refreshView", "DreamFragment.onCreate()");
-        Log.d("cancelCreate", "DreamFragment.onCreate start");
         super.onCreate(savedInstanceState);
-        Log.d("cancelCreate", "DreamFragment.onCreate after super");
         UUID dreamId = (UUID) getArguments().getSerializable(ARG_DREAM_ID);
         mDream = DreamLab.getInstance(getActivity()).getDream(dreamId);
         if (mDream == null) {
             mDream = new Dream();
         }
-        Log.d("cancelCreate", "DreamFragment.onCreate after setting mDream");
         setHasOptionsMenu(true);
     }
 
@@ -87,7 +83,6 @@ public class DreamFragment extends Fragment {
             case android.R.id.home:
                 if (mTitleField.getText().toString() == null ||
                         mTitleField.getText().toString().equals("")) {
-                    Log.d("UpButton", "DreamFragment.onOptionsItemSelected in if");
                     FragmentManager manager = DreamFragment.this.getFragmentManager();
                     NeedTitleFragment dialog = new NeedTitleFragment();
 //                    dialog.setTargetFragment(
@@ -108,8 +103,6 @@ public class DreamFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        Log.d("cancelCreate", "DreamFragment.onCreateView start");
-        Log.d("refreshView", "DreamFragment.onCreateView()");
         View view = inflater.inflate(R.layout.fragment_dream, container, false);
 
         // initialize view fields
@@ -169,7 +162,6 @@ public class DreamFragment extends Fragment {
         mEntryButton4 = view.findViewById(R.id.dream_entry_4);
         mEntryButton4.setEnabled(false);
 
-        Log.d("cancelCreate", "DreamFragment.onCreateView before FAB");
         mAddCommentFAB = view.findViewById(R.id.add_comment_fab);
         mAddCommentFAB.setOnClickListener(
                 v -> {
@@ -180,9 +172,7 @@ public class DreamFragment extends Fragment {
                     dialog.show(manager, DIALOG_ADD_DREAM_ENTRY);
                     });
 
-        Log.d("cancelCreate", "DreamFragment.onCreateView before refreshView");
         refreshView();
-        Log.d("cancelCreate", "DreamFragment.onCreateView after refreshView");
 
         return view;
     }
@@ -201,47 +191,44 @@ public class DreamFragment extends Fragment {
 
     @Override
     public void onPause() {
-        Log.d("cancelCreate", "DreamFragment.onPause start");
         super.onPause();
-        Log.d("cancelCreate", "DreamFragment.onPause after super");
-        if (mDream.getTitle() != null && !mDream.getTitle().equals("")) {
-            Log.d("cancelCreate", "DreamFragment.onPause in if");
-            //If the ID doesn't exist in the database, create a new Dream
-            //Else (if it does exist) update the dream
-            if (DreamLab.getInstance(getActivity()).getDream(mDream.getId()) == null) {
-                DreamLab.getInstance(getActivity()).addDream(mDream);
-            } else {
-                DreamLab.getInstance(getActivity())
-                        .updateDream(mDream);
-                DreamEntryLab.getInstance(getActivity())
-                        .updateDreamEntries(mDream);
+
+        // If the dream exists, update the entries
+        // If the dream exists and the title is valid update the dream
+        // If the dream does not exist and the title is valid, create the dream
+        // (which will create entries)
+        // else do nothing after call to super
+
+        if (DreamLab.getInstance(getActivity()).getDream(mDream.getId()) != null) {
+            DreamEntryLab.getInstance(getActivity()).updateDreamEntries(mDream);
+
+            if (mDream.getTitle() != null && !mDream.getTitle().equals("")) {
+                DreamLab.getInstance(getActivity()).updateDream(mDream);
             }
         }
-
+        if (DreamLab.getInstance(getActivity()).getDream(mDream.getId()) == null &&
+                mDream.getTitle() != null &&
+                !mDream.getTitle().equals("")) {
+            DreamLab.getInstance(getActivity()).addDream(mDream);
+        }
     }
 
 
     private void refreshView() {
-        Log.d("cancelCreate", "DreamFragment.refreshView start");
-        Log.d("cancelCreate", "DreamFragment.refreshView start:" + mDream.toString());
-        Log.d("cancelCreate", "DreamFragment.refreshView start:" + mDream.getTitle());
         if (mDream.getTitle() != null) {
-            Log.d("cancelCreate", "DreamFragment.refreshView in getTitle if");
             mTitleField.setText(mDream.getTitle());
         }
-        Log.d("cancelCreate", "DreamFragment.refreshView after getTitle if");
         mRealizedCheckBox.setChecked(mDream.isRealized());
         mDeferredCheckBox.setChecked(mDream.isDeferred());
 
         refreshCheckboxEnabled();
 
         List<DreamEntry> entries = mDream.getDreamEntries();
-        Log.d("refreshView", "entries" + entries.toString());
         refreshEntryButtons();
 
-        for (DreamEntry e : entries) {
-            Log.d("refreshView", e.getText());
-        }
+//        for (DreamEntry e : entries) {
+//            Log.d("refreshView", e.getText());
+//        }
     }
 
     private void refreshCheckboxEnabled() {
