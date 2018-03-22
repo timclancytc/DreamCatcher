@@ -41,10 +41,11 @@ public class DreamLab {
             dream0.addComment("Comment 3");
             dream0.addComment("Comment 4");
             dream0.selectDreamRealized();
+            Log.d("install", "DreamLab.DreamLab before addDream");
             addDream(dream0);
+
+            Log.d("install", "DreamLab.DreamLab end");
         }
-
-
     }
 
 

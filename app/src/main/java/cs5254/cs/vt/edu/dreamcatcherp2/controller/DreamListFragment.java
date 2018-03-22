@@ -33,6 +33,7 @@ public class DreamListFragment extends Fragment {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        Log.d("install", "DreamListFragment.onCreate start");
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
