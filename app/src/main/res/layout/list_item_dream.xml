@@ -36,7 +36,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_check_circle_black_48dp"
+        app:srcCompat="@drawable/ic_check_circle_green"
         android:contentDescription="@string/realized_dream_content_description" />
 
     <ImageView
@@ -49,6 +49,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_alarm_black_48dp"
+        app:srcCompat="@drawable/ic_alarm_red"
         android:contentDescription="@string/deferred_dream_content_description" />
 </android.support.constraint.ConstraintLayout>
