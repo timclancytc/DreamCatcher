@@ -1,5 +1,7 @@
 package cs5254.cs.vt.edu.dreamcatcherp2.model;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -42,6 +44,8 @@ public class Dream {
     }
 
     public String getTitle() {
+
+        Log.d("cancelCreate", "Dream.getTitle start");
         return mTitle;
     }
 

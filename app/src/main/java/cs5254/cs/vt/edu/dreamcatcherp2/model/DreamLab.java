@@ -49,6 +49,7 @@ public class DreamLab {
 
 
     public void addDream(Dream dream) {
+        Log.d("cancelCreate", "DreamLab.addDream");
         ContentValues values = getDreamValues(dream);
         mDatabase.insert(DreamDbSchema.DreamTable.NAME, null, values);
         for (DreamEntry entry : dream.getDreamEntries()) {
@@ -57,11 +58,12 @@ public class DreamLab {
     }
 
     public void updateDream(Dream dream) {
+        Log.d("cancelCreate", "DreamLab.updateDream");
         String uuidString = dream.getId().toString();
         ContentValues values = getDreamValues(dream);
         mDatabase.update(DreamDbSchema.DreamTable.NAME, values,
-                DreamDbSchema.DreamTable.Cols.UUID + " = ?",
-                new String[] { uuidString });
+                    DreamDbSchema.DreamTable.Cols.UUID + " = ?",
+                    new String[] { uuidString });
     }
 
     private static ContentValues getDreamValues(Dream dream) {
