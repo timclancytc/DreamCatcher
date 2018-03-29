@@ -1,4 +1,4 @@
-package cs5254.cs.vt.edu.dreamcatcherp2.view;
+package cs5254.cs.vt.edu.dreamcatcherp3.view;
 
 
 import android.support.v7.widget.RecyclerView;
@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
-import cs5254.cs.vt.edu.dreamcatcherp2.model.Dream;
+import cs5254.cs.vt.edu.dreamcatcherp3.model.Dream;
 
 
 

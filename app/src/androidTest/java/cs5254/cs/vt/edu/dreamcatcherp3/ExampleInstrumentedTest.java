@@ -1,4 +1,4 @@
-package cs5254.cs.vt.edu.dreamcatcherp2;
+package cs5254.cs.vt.edu.dreamcatcherp3;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

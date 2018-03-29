@@ -1,4 +1,4 @@
-package cs5254.cs.vt.edu.dreamcatcherp2.controller;
+package cs5254.cs.vt.edu.dreamcatcherp3.controller;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -17,10 +17,10 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
-import cs5254.cs.vt.edu.dreamcatcherp2.R;
-import cs5254.cs.vt.edu.dreamcatcherp2.model.Dream;
-import cs5254.cs.vt.edu.dreamcatcherp2.model.DreamLab;
-import cs5254.cs.vt.edu.dreamcatcherp2.view.DreamAdapter;
+import cs5254.cs.vt.edu.dreamcatcherp3.R;
+import cs5254.cs.vt.edu.dreamcatcherp3.model.Dream;
+import cs5254.cs.vt.edu.dreamcatcherp3.model.DreamLab;
+import cs5254.cs.vt.edu.dreamcatcherp3.view.DreamAdapter;
 
 public class DreamListFragment extends Fragment {
 

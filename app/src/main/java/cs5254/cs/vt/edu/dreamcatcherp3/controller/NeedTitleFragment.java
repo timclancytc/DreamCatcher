@@ -1,12 +1,10 @@
-package cs5254.cs.vt.edu.dreamcatcherp2.controller;
+package cs5254.cs.vt.edu.dreamcatcherp3.controller;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 
-import cs5254.cs.vt.edu.dreamcatcherp2.R;
+import cs5254.cs.vt.edu.dreamcatcherp3.R;
 
 public class NeedTitleFragment extends DialogFragment {
 

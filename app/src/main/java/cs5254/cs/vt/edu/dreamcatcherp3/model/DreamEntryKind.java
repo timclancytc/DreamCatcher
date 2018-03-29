@@ -1,4 +1,4 @@
-package cs5254.cs.vt.edu.dreamcatcherp2.model;
+package cs5254.cs.vt.edu.dreamcatcherp3.model;
 
 public enum DreamEntryKind {
 

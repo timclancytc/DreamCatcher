@@ -1,4 +1,4 @@
-package cs5254.cs.vt.edu.dreamcatcherp2.controller;
+package cs5254.cs.vt.edu.dreamcatcherp3.controller;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -10,7 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 
-import cs5254.cs.vt.edu.dreamcatcherp2.R;
+import cs5254.cs.vt.edu.dreamcatcherp3.R;
 
 
 public class AddDreamEntryFragment extends DialogFragment{

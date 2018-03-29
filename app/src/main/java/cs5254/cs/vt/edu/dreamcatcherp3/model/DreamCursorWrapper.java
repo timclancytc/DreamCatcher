@@ -1,4 +1,4 @@
-package cs5254.cs.vt.edu.dreamcatcherp2.model;
+package cs5254.cs.vt.edu.dreamcatcherp3.model;
 
 import android.database.Cursor;
 import android.database.CursorWrapper;
@@ -6,7 +6,7 @@ import android.database.CursorWrapper;
 import java.util.Date;
 import java.util.UUID;
 
-import cs5254.cs.vt.edu.dreamcatcherp2.database.DreamDbSchema;
+import cs5254.cs.vt.edu.dreamcatcherp3.database.DreamDbSchema;
 
 public class DreamCursorWrapper extends CursorWrapper {
     public DreamCursorWrapper(Cursor cursor) {

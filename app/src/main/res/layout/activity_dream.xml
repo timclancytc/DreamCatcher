@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="cs5254.cs.vt.edu.dreamcatcherp2.controller.DreamActivity">
+    tools:context="cs5254.cs.vt.edu.dreamcatcherp3.controller.DreamActivity">
 
     <TextView
         android:layout_width="wrap_content"

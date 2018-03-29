@@ -1,4 +1,4 @@
-package cs5254.cs.vt.edu.dreamcatcherp2.model;
+package cs5254.cs.vt.edu.dreamcatcherp3.model;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import cs5254.cs.vt.edu.dreamcatcherp2.database.DreamBaseHelper;
-import cs5254.cs.vt.edu.dreamcatcherp2.database.DreamDbSchema;
+import cs5254.cs.vt.edu.dreamcatcherp3.database.DreamBaseHelper;
+import cs5254.cs.vt.edu.dreamcatcherp3.database.DreamDbSchema;
 
 public class DreamLab {
 

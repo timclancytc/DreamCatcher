@@ -1,4 +1,4 @@
-package cs5254.cs.vt.edu.dreamcatcherp2.view;
+package cs5254.cs.vt.edu.dreamcatcherp3.view;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,9 +11,9 @@ import android.widget.TextView;
 
 import java.text.DateFormat;
 
-import cs5254.cs.vt.edu.dreamcatcherp2.R;
-import cs5254.cs.vt.edu.dreamcatcherp2.controller.DreamActivity;
-import cs5254.cs.vt.edu.dreamcatcherp2.model.Dream;
+import cs5254.cs.vt.edu.dreamcatcherp3.R;
+import cs5254.cs.vt.edu.dreamcatcherp3.controller.DreamActivity;
+import cs5254.cs.vt.edu.dreamcatcherp3.model.Dream;
 
 
 public class DreamHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

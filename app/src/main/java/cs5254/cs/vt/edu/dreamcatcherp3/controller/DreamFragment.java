@@ -1,4 +1,4 @@
-package cs5254.cs.vt.edu.dreamcatcherp2.controller;
+package cs5254.cs.vt.edu.dreamcatcherp3.controller;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -10,11 +10,8 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.NavUtils;
-import android.support.v4.app.TaskStackBuilder;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,11 +24,11 @@ import java.text.DateFormat;
 import java.util.List;
 import java.util.UUID;
 
-import cs5254.cs.vt.edu.dreamcatcherp2.R;
-import cs5254.cs.vt.edu.dreamcatcherp2.model.Dream;
-import cs5254.cs.vt.edu.dreamcatcherp2.model.DreamEntry;
-import cs5254.cs.vt.edu.dreamcatcherp2.model.DreamLab;
-import cs5254.cs.vt.edu.dreamcatcherp2.model.DreamEntryLab;
+import cs5254.cs.vt.edu.dreamcatcherp3.R;
+import cs5254.cs.vt.edu.dreamcatcherp3.model.Dream;
+import cs5254.cs.vt.edu.dreamcatcherp3.model.DreamEntry;
+import cs5254.cs.vt.edu.dreamcatcherp3.model.DreamLab;
+import cs5254.cs.vt.edu.dreamcatcherp3.model.DreamEntryLab;
 
 public class DreamFragment extends Fragment {
 

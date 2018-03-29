@@ -1,4 +1,4 @@
-package cs5254.cs.vt.edu.dreamcatcherp2.database;
+package cs5254.cs.vt.edu.dreamcatcherp3.database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
