@@ -18,4 +18,5 @@
     <string name="add_comment_title">Add Comment</string>
     <string name="need_title_title">Need a Title!</string>
     <string name="need_title_message">Please add a title</string>
+    <string name="share_dream">Share</string>
 </resources>
