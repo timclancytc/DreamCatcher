@@ -19,4 +19,12 @@
     <string name="need_title_title">Need a Title!</string>
     <string name="need_title_message">Please add a title</string>
     <string name="share_dream">Share</string>
+    <string name="dream_share">%1$s!
+        The dream was revealed on %2$s. %3$s
+    </string>
+    <string name="dream_share_realized">The dream was realized on %s.</string>
+    <string name="dream_share_deferred">The dream was deferred on %s.</string>
+    <string name="dream_share_active">The dream is still active.</string>
+    <string name="dream_share_subject">Dreamcatcher Dream Share</string>
+    <string name="dream_share_send">Share your dream with</string>
 </resources>

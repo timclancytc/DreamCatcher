@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -120,6 +121,11 @@ public class DreamLab {
         } finally {
             cursor.close();
         }
+    }
+
+    public File getPhotoFile(Dream dream) {
+        File filesDir = mContext.getFilesDir();
+        return new File(filesDir, dream.getPhotoFilename());
     }
 
 

@@ -2,24 +2,34 @@ package cs5254.cs.vt.edu.dreamcatcherp3.controller;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.FileProvider;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.util.List;
 import java.util.UUID;
@@ -38,11 +48,13 @@ public class DreamFragment extends Fragment {
     private static final int COMMENT_COLOR = 0xffffd479;
     private static final String DIALOG_ADD_DREAM_ENTRY = "Dialog_Add_Dream_Entry";
     private static final String DIALOG_ADD_TITLE = "Dialog_Add_Title";
-    private static final int REQUEST_COMMENT = 0; //TODO update number
+    private static final int REQUEST_COMMENT = 0;
+    private static final int REQUEST_PHOTO = 2;
     private static String ARG_DREAM_ID = "dream_id";
 
     // model fields
     private Dream mDream;
+    private File mPhotoFile;
 
     // view fields
     private EditText mTitleField;
@@ -54,6 +66,8 @@ public class DreamFragment extends Fragment {
     private Button mEntryButton3;
     private Button mEntryButton4;
     private FloatingActionButton mAddCommentFAB;
+    private ImageButton mPhotoButton;
+    private ImageView mPhotoView;
 
     public static DreamFragment newInstance(UUID dreamId) {
         Bundle args = new Bundle();
@@ -71,6 +85,9 @@ public class DreamFragment extends Fragment {
         if (mDream == null) {
             mDream = new Dream();
         }
+
+        mPhotoFile = DreamLab.getInstance(getActivity()).getPhotoFile(mDream);
+
         setHasOptionsMenu(true);
     }
 
@@ -88,6 +105,13 @@ public class DreamFragment extends Fragment {
                     return true;
                 }
                 return super.onOptionsItemSelected(item);
+            case R.id.share_dream:
+                Intent i = new Intent(Intent.ACTION_SEND);
+                i.setType("text/plain");
+                i.putExtra(Intent.EXTRA_TEXT, getDreamShare());
+                i.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.dream_share_subject));
+                i = Intent.createChooser(i, getString(R.string.dream_share_send));
+                startActivity(i);
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -171,6 +195,39 @@ public class DreamFragment extends Fragment {
 
         refreshView();
 
+        PackageManager packageManager = getActivity().getPackageManager();
+
+        mPhotoButton = (ImageButton) view.findViewById(R.id.dream_camera);
+        final Intent captureImage = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        boolean canTakePhoto = mPhotoFile != null &&
+                captureImage.resolveActivity(packageManager) != null;
+        mPhotoButton.setEnabled(canTakePhoto);
+
+        mPhotoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri uri = FileProvider.getUriForFile(getActivity(),
+                        "cs5254.cs.vt.edu.dreamcatcherp3.fileprovider",
+                        mPhotoFile);
+                captureImage.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+
+                List<ResolveInfo> cameraActivities = getActivity()
+                        .getPackageManager().queryIntentActivities(captureImage,
+                                PackageManager.MATCH_DEFAULT_ONLY);
+
+                for (ResolveInfo activity : cameraActivities) {
+                    getActivity().grantUriPermission(activity.activityInfo.packageName,
+                            uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                }
+
+                startActivityForResult(captureImage, REQUEST_PHOTO);
+            }
+        });
+
+
+        mPhotoView = (ImageView) view.findViewById(R.id.dream_photo);
+
         return view;
     }
 
@@ -209,6 +266,13 @@ public class DreamFragment extends Fragment {
             DreamLab.getInstance(getActivity()).addDream(mDream);
         }
     }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_dream, menu);
+    }
+
 
 
     private void refreshView() {
@@ -308,6 +372,31 @@ public class DreamFragment extends Fragment {
     private void setCommentStyle(Button button) {
         button.getBackground().setColorFilter(COMMENT_COLOR, PorterDuff.Mode.MULTIPLY);
         button.setTextColor(Color.BLACK);
+    }
+
+    private String getDreamShare() {
+        String dateFormat = "EEE, MMM dd";
+        String dateRevealedString = android.text.format.DateFormat.format(
+                dateFormat, mDream.getRevealedDate()).toString();
+
+        String dreamFateString = getString(R.string.dream_share_active);
+
+        if (mDream.isRealized()) {
+            dreamFateString = getString(
+                    R.string.dream_share_realized, android.text.format.DateFormat.format(
+                            dateFormat, mDream.getRealizedDate()).toString());
+        } else if (mDream.isDeferred()){
+            dreamFateString = getString(
+                    R.string.dream_share_deferred, android.text.format.DateFormat.format(
+                            dateFormat, mDream.getDeferredDate()).toString());
+        }
+
+
+
+        String shareDream = getString(R.string.dream_share,
+                mDream.getTitle(), dateRevealedString, dreamFateString);
+
+        return shareDream;
     }
 
 }

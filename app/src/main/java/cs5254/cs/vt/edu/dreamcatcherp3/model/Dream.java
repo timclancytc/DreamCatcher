@@ -155,4 +155,36 @@ public class Dream {
     public void setDreamEntries(List<DreamEntry> entries) {
         mDreamEntries = entries;
     }
+
+    /*
+    This method assumes that it will only be called if the dream is realized
+    It will return Null if the dream is not realized
+     */
+    public Date getRealizedDate() {
+
+        for (DreamEntry entry : mDreamEntries) {
+            if (entry.getKind() == DreamEntryKind.REALIZED)
+                return entry.getDate();
+        }
+
+        return null;
+    }
+
+    /*
+    This method assumes that it will only be called if the dream is deferred
+    It will return Null if the dream is not deferred
+     */
+    public Date getDeferredDate() {
+
+        for (DreamEntry entry : mDreamEntries) {
+            if (entry.getKind() == DreamEntryKind.REALIZED)
+                return entry.getDate();
+        }
+
+        return null;
+    }
+
+    public String getPhotoFilename() {
+        return "IMG_" + this.getId().toString() + ".jpg";
+    }
 }
