@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.net.Uri;
@@ -228,6 +229,8 @@ public class DreamFragment extends Fragment {
 
         mPhotoView = (ImageView) view.findViewById(R.id.dream_photo);
 
+        updatePhotoView();
+
         return view;
     }
 
@@ -240,6 +243,14 @@ public class DreamFragment extends Fragment {
                     AddDreamEntryFragment.EXTRA_COMMENT);
             mDream.addComment(comment);
             refreshEntryButtons();
+        } else if (requestCode == REQUEST_PHOTO) {
+             Uri uri = FileProvider.getUriForFile(getActivity(),
+                    "cs5254.cs.vt.edu.dreamcatcherp3.fileprovider",
+                    mPhotoFile);
+
+            getActivity().revokeUriPermission(uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+
+            updatePhotoView();
         }
     }
 
@@ -397,6 +408,17 @@ public class DreamFragment extends Fragment {
                 mDream.getTitle(), dateRevealedString, dreamFateString);
 
         return shareDream;
+    }
+
+    private void updatePhotoView() {
+        if (mPhotoFile == null || !mPhotoFile.exists()) {
+            mPhotoView.setImageDrawable(null);
+        } else {
+            Bitmap bitmap = PictureUtils.getScaledBitmap(mPhotoFile.getPath(), getActivity());
+            mPhotoView.setImageBitmap(bitmap);
+        }
+
+
     }
 
 }
