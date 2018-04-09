@@ -39,6 +39,7 @@
         app:srcCompat="@drawable/ic_check_circle_green"
         android:contentDescription="@string/realized_dream_content_description" />
 
+    <!--TODO: Change Deferred Picture-->
     <ImageView
         android:id="@+id/dream_deferred_view"
         android:layout_width="wrap_content"

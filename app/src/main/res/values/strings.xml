@@ -27,4 +27,5 @@
     <string name="dream_share_active">The dream is still active.</string>
     <string name="dream_share_subject">Dreamcatcher Dream Share</string>
     <string name="dream_share_send">Share your dream with</string>
+    <string name="display_photo_title">Dream Photo</string>
 </resources>

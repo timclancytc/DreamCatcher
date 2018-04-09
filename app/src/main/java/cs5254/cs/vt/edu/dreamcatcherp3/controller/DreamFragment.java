@@ -49,8 +49,10 @@ public class DreamFragment extends Fragment {
     private static final int COMMENT_COLOR = 0xffffd479;
     private static final String DIALOG_ADD_DREAM_ENTRY = "Dialog_Add_Dream_Entry";
     private static final String DIALOG_ADD_TITLE = "Dialog_Add_Title";
+    private static final String DIALOG_DISPLAY_PHOTO = "Dialog_Display_Photo";
     private static final int REQUEST_COMMENT = 0;
     private static final int REQUEST_PHOTO = 2;
+    private static final int DISPLAY_PHOTO = 3;
     private static String ARG_DREAM_ID = "dream_id";
 
     // model fields
@@ -228,6 +230,12 @@ public class DreamFragment extends Fragment {
 
 
         mPhotoView = (ImageView) view.findViewById(R.id.dream_photo);
+        mPhotoView.setOnClickListener(
+                v -> {
+                    FragmentManager manager = DreamFragment.this.getFragmentManager();
+                    DisplayPhotoFragment dialog = new DisplayPhotoFragment();
+                    dialog.show(manager, DIALOG_DISPLAY_PHOTO);
+                });
 
         updatePhotoView();
 
