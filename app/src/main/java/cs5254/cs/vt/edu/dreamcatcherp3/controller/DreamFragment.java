@@ -17,6 +17,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.FileProvider;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -42,13 +44,11 @@ import cs5254.cs.vt.edu.dreamcatcherp3.model.Dream;
 import cs5254.cs.vt.edu.dreamcatcherp3.model.DreamEntry;
 import cs5254.cs.vt.edu.dreamcatcherp3.model.DreamLab;
 import cs5254.cs.vt.edu.dreamcatcherp3.model.DreamEntryLab;
+import cs5254.cs.vt.edu.dreamcatcherp3.view.DreamAdapter;
+import cs5254.cs.vt.edu.dreamcatcherp3.view.EntryAdapter;
 
 public class DreamFragment extends Fragment {
 
-    private static final int REVEALED_COLOR = 0xff999f00;
-    private static final int REALIZED_COLOR = 0xff008f00;
-    private static final int DEFERRED_COLOR = 0xff010f99;
-    private static final int COMMENT_COLOR = 0xffffd479;
     private static final String DIALOG_ADD_DREAM_ENTRY = "Dialog_Add_Dream_Entry";
     private static final String DIALOG_ADD_TITLE = "Dialog_Add_Title";
     private static final String DIALOG_DISPLAY_PHOTO = "Dialog_Display_Photo";
@@ -65,15 +65,16 @@ public class DreamFragment extends Fragment {
     private EditText mTitleField;
     private CheckBox mRealizedCheckBox;
     private CheckBox mDeferredCheckBox;
-    private Button mEntryButton0;
-    private Button mEntryButton1;
-    private Button mEntryButton2;
-    private Button mEntryButton3;
-    private Button mEntryButton4;
+
     private FloatingActionButton mAddCommentFAB;
     private ImageButton mPhotoButton;
     private ImageView mPhotoView;
 
+    //Recycler view fields
+    private RecyclerView mEntryRecyclerView;
+    private EntryAdapter mEntryAdapter;
+
+    //Callbacks
     private Callbacks mCallbacks;
 
     public interface Callbacks {
@@ -142,7 +143,11 @@ public class DreamFragment extends Fragment {
         }
     }
 
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateUI();
+    }
 
     @Nullable
     @Override
@@ -150,6 +155,9 @@ public class DreamFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_dream, container, false);
+
+        mEntryRecyclerView = view.findViewById(R.id.entry_recycler_view);
+        mEntryRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         // initialize view fields
 
@@ -206,17 +214,6 @@ public class DreamFragment extends Fragment {
             updateDream();
             refreshView();
         });
-
-        mEntryButton0 = view.findViewById(R.id.dream_entry_0);
-        mEntryButton0.setEnabled(false);
-        mEntryButton1 = view.findViewById(R.id.dream_entry_1);
-        mEntryButton1.setEnabled(false);
-        mEntryButton2 = view.findViewById(R.id.dream_entry_2);
-        mEntryButton2.setEnabled(false);
-        mEntryButton3 = view.findViewById(R.id.dream_entry_3);
-        mEntryButton3.setEnabled(false);
-        mEntryButton4 = view.findViewById(R.id.dream_entry_4);
-        mEntryButton4.setEnabled(false);
 
         mAddCommentFAB = view.findViewById(R.id.add_comment_fab);
         mAddCommentFAB.setOnClickListener(
@@ -276,6 +273,8 @@ public class DreamFragment extends Fragment {
 
         updatePhotoView();
 
+        updateUI();
+
         return view;
     }
 
@@ -298,6 +297,7 @@ public class DreamFragment extends Fragment {
 
             updateDream();
             updatePhotoView();
+            updateUI();
         }
     }
 
@@ -344,6 +344,7 @@ public class DreamFragment extends Fragment {
 
         List<DreamEntry> entries = mDream.getDreamEntries();
         refreshEntryButtons();
+        updateUI();
 
 //        for (DreamEntry e : entries) {
 //            Log.d("refreshView", e.getText());
@@ -362,11 +363,13 @@ public class DreamFragment extends Fragment {
     }
 
     private void refreshEntryButtons() {
-        refreshEntryButton(mEntryButton0, 0);
-        refreshEntryButton(mEntryButton1, 1);
-        refreshEntryButton(mEntryButton2, 2);
-        refreshEntryButton(mEntryButton3, 3);
-        refreshEntryButton(mEntryButton4, 4);
+//        refreshEntryButton(mEntryButton0, 0);
+//        refreshEntryButton(mEntryButton1, 1);
+//        refreshEntryButton(mEntryButton2, 2);
+//        refreshEntryButton(mEntryButton3, 3);
+//        refreshEntryButton(mEntryButton4, 4);
+
+        //TODO implement with Recycler View
     }
 
     private void refreshEntryButton(Button button, int position) {
@@ -386,50 +389,6 @@ public class DreamFragment extends Fragment {
             int newPosition = mDream.getDreamEntries().size() - 5 + position;
             entry = mDream.getDreamEntries().get(newPosition);
         }
-
-
-        // set style
-        // set text
-        switch (entry.getKind()) {
-            case REVEALED:
-                setRevealedStyle(button);
-                button.setText(entry.getText());
-                break;
-            case DEFERRED:
-                setDeferredStyle(button);
-                button.setText(entry.getText());
-                break;
-            case REALIZED:
-                setRealizedStyle(button);
-                button.setText(entry.getText());
-                break;
-            case COMMENT:
-                setCommentStyle(button);
-                String text = entry.getText();
-                DateFormat dateFormat = android.text.format.DateFormat
-                        .getMediumDateFormat(getContext());
-                button.setText(text + " (" + dateFormat.format(entry.getDate()) + ")");
-        }
-    }
-
-    private void setRevealedStyle(Button button) {
-        button.getBackground().setColorFilter(REVEALED_COLOR, PorterDuff.Mode.MULTIPLY);
-        button.setTextColor(Color.WHITE);
-    }
-
-    private void setRealizedStyle(Button button) {
-        button.getBackground().setColorFilter(REALIZED_COLOR, PorterDuff.Mode.MULTIPLY);
-        button.setTextColor(Color.WHITE);
-    }
-
-    private void setDeferredStyle(Button button) {
-        button.getBackground().setColorFilter(DEFERRED_COLOR, PorterDuff.Mode.MULTIPLY);
-        button.setTextColor(Color.WHITE);
-    }
-
-    private void setCommentStyle(Button button) {
-        button.getBackground().setColorFilter(COMMENT_COLOR, PorterDuff.Mode.MULTIPLY);
-        button.setTextColor(Color.BLACK);
     }
 
     private String getDreamShare() {
@@ -469,6 +428,21 @@ public class DreamFragment extends Fragment {
     private void updateDream() {
         DreamLab.getInstance(getActivity()).updateDream(mDream);
         mCallbacks.onDreamUpdated(mDream);
+    }
+
+    public void updateUI() {
+
+        List<DreamEntry> entries = mDream.getDreamEntries();
+
+        if (mEntryAdapter == null) {
+            mEntryAdapter = new EntryAdapter(entries);
+            mEntryRecyclerView.setAdapter(mEntryAdapter);
+        }
+        else {
+            mEntryAdapter.setEntries(entries);
+            mEntryAdapter.notifyDataSetChanged();
+        }
+
     }
 
 }

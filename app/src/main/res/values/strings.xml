@@ -29,4 +29,5 @@
     <string name="dream_share_send">Share your dream with</string>
     <string name="display_photo_title">Dream Photo</string>
     <string name="display_photo_content">Dream Photo</string>
+    <string name="take_picture">Take Picture</string>
 </resources>
