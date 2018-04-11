@@ -18,6 +18,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.FileProvider;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -230,10 +231,15 @@ public class DreamFragment extends Fragment {
 
 
         mPhotoView = (ImageView) view.findViewById(R.id.dream_photo);
+        Log.d("Photo Dialog", "DreamFragment.onCreatView before mPhotoView setOnClickListener");
         mPhotoView.setOnClickListener(
                 v -> {
+                    Log.d("Photo Dialog", "DreamFragment.onCreatView mPhotoView setOnClickListener");
+                    if (mPhotoFile == null || !mPhotoFile.exists()) {
+                        return;
+                    }
                     FragmentManager manager = DreamFragment.this.getFragmentManager();
-                    DisplayPhotoFragment dialog = new DisplayPhotoFragment();
+                    DisplayPhotoFragment dialog = DisplayPhotoFragment.newInstance(mPhotoFile.getPath());
                     dialog.show(manager, DIALOG_DISPLAY_PHOTO);
                 });
 
