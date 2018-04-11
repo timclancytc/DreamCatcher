@@ -28,7 +28,7 @@
                 android:id="@+id/dream_photo"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:background="@android:color/darker_gray"
+                android:background="@android:color/black"
                 android:cropToPadding="true"
                 android:scaleType="centerInside"
                 app:srcCompat="@android:drawable/ic_menu_report_image" />
