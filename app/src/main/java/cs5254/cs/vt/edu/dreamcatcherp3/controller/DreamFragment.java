@@ -1,6 +1,7 @@
 package cs5254.cs.vt.edu.dreamcatcherp3.controller;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -73,6 +74,26 @@ public class DreamFragment extends Fragment {
     private ImageButton mPhotoButton;
     private ImageView mPhotoView;
 
+    private Callbacks mCallbacks;
+
+    public interface Callbacks {
+        void onDreamUpdated(Dream dream);
+    }
+
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mCallbacks = (Callbacks) context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallbacks = null;
+    }
+
     public static DreamFragment newInstance(UUID dreamId) {
         Bundle args = new Bundle();
         args.putSerializable(ARG_DREAM_ID, dreamId);
@@ -142,6 +163,14 @@ public class DreamFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 mDream.setTitle(charSequence.toString());
+
+                if (DreamLab.getInstance(getActivity()).getDream(mDream.getId()) == null &&
+                        mDream.getTitle() != null &&
+                        !mDream.getTitle().equals("")) {
+                    DreamLab.getInstance(getActivity()).addDream(mDream);
+                }
+
+                updateDream();
             }
 
             @Override
@@ -160,6 +189,7 @@ public class DreamFragment extends Fragment {
                 if (mDream.isRealized()) { mDream.removeDreamRealized(); }
             }
             mDream.setRealized(b);
+            updateDream();
             refreshView();
         });
 
@@ -173,6 +203,7 @@ public class DreamFragment extends Fragment {
                 if (mDream.isDeferred()) {mDream.removeDreamDeferred();}
             }
             mDream.setDeferred(c);
+            updateDream();
             refreshView();
         });
 
@@ -256,6 +287,7 @@ public class DreamFragment extends Fragment {
             String comment = (String) intent.getSerializableExtra(
                     AddDreamEntryFragment.EXTRA_COMMENT);
             mDream.addComment(comment);
+            updateDream();
             refreshEntryButtons();
         } else if (requestCode == REQUEST_PHOTO) {
              Uri uri = FileProvider.getUriForFile(getActivity(),
@@ -264,6 +296,7 @@ public class DreamFragment extends Fragment {
 
             getActivity().revokeUriPermission(uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
 
+            updateDream();
             updatePhotoView();
         }
     }
@@ -431,8 +464,11 @@ public class DreamFragment extends Fragment {
             Bitmap bitmap = PictureUtils.getScaledBitmap(mPhotoFile.getPath(), getActivity());
             mPhotoView.setImageBitmap(bitmap);
         }
+    }
 
-
+    private void updateDream() {
+        DreamLab.getInstance(getActivity()).updateDream(mDream);
+        mCallbacks.onDreamUpdated(mDream);
     }
 
 }

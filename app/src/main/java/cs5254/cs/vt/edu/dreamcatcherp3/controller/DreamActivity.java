@@ -6,7 +6,10 @@ import android.support.v4.app.Fragment;
 
 import java.util.UUID;
 
-public class DreamActivity extends SingleFragmentActivity {
+import cs5254.cs.vt.edu.dreamcatcherp3.model.Dream;
+
+public class DreamActivity extends SingleFragmentActivity
+    implements DreamFragment.Callbacks{
 
     private static final String EXTRA_DREAM_ID = "dreamcatcher.dream_id";
 
@@ -20,5 +23,10 @@ public class DreamActivity extends SingleFragmentActivity {
         Intent intent = new Intent(context, DreamActivity.class);
         intent.putExtra(EXTRA_DREAM_ID, dreamId);
         return intent;
+    }
+
+    @Override
+    public void onDreamUpdated(Dream dream) {
+        //No actions required
     }
 }

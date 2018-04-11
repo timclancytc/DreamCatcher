@@ -13,6 +13,8 @@ import java.text.DateFormat;
 
 import cs5254.cs.vt.edu.dreamcatcherp3.R;
 import cs5254.cs.vt.edu.dreamcatcherp3.controller.DreamActivity;
+import cs5254.cs.vt.edu.dreamcatcherp3.controller.DreamFragment;
+import cs5254.cs.vt.edu.dreamcatcherp3.controller.DreamListFragment;
 import cs5254.cs.vt.edu.dreamcatcherp3.model.Dream;
 
 
@@ -20,6 +22,8 @@ public class DreamHolder extends RecyclerView.ViewHolder implements View.OnClick
 
     //model field
     private Dream mDream;
+
+    //private Callbacks mCallbacks;
 
     //view field
     private TextView mTitleTextView;
@@ -29,6 +33,10 @@ public class DreamHolder extends RecyclerView.ViewHolder implements View.OnClick
 
     //context
     private Context context;
+
+    public interface Callbacks {
+        void onDreamSelected(Dream dream);
+    }
 
     public DreamHolder(LayoutInflater inflater, ViewGroup parent) {
         super(inflater.inflate(R.layout.list_item_dream, parent, false));
@@ -55,9 +63,12 @@ public class DreamHolder extends RecyclerView.ViewHolder implements View.OnClick
     public void onClick(View v) {
 //        Toast.makeText(v.getContext(), mDream.getTitle() + "clicked!",
 //                Toast.LENGTH_SHORT).show();
-        Context context = v.getContext();
-        Intent intent = DreamActivity.newIntent(context, mDream.getId());
-        context.startActivity(intent);
+//        Context context = v.getContext();
+//        Intent intent = DreamActivity.newIntent(context, mDream.getId());
+//        context.startActivity(intent);
+
+        DreamListFragment.mCallbacks.onDreamSelected(mDream);
+
 
 
     }

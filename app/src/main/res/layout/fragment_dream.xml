@@ -4,30 +4,33 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linearLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="8dp">
 
     <LinearLayout
         android:id="@+id/dream_head_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:id="@+id/dream_head_picture_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingRight="8dp">
 
 
             <ImageView
                 android:id="@+id/dream_photo"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:scaleType="centerInside"
-                android:cropToPadding="true"
                 android:background="@android:color/darker_gray"
+                android:cropToPadding="true"
+                android:scaleType="centerInside"
                 app:srcCompat="@android:drawable/ic_menu_report_image" />
 
             <ImageButton
@@ -41,8 +44,8 @@
             android:id="@+id/dream_head_text_layout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/textView"
@@ -63,12 +66,10 @@
     </LinearLayout>
 
 
-
     <CheckBox
         android:id="@+id/dream_realized"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:text="@string/realized_checkbox"
         app:layout_constraintEnd_toStartOf="@+id/dream_deferred"
         app:layout_constraintHorizontal_bias="0.5"
@@ -148,7 +149,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@android:drawable/ic_input_add" />
-
 
 
 </android.support.constraint.ConstraintLayout>

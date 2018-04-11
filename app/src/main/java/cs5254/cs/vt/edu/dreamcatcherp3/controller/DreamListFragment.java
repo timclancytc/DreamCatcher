@@ -1,5 +1,6 @@
 package cs5254.cs.vt.edu.dreamcatcherp3.controller;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -30,6 +31,24 @@ public class DreamListFragment extends Fragment {
 
     //model field
     private DreamLab mDreamLab;
+
+    public static Callbacks mCallbacks;
+
+    public interface Callbacks {
+        void onDreamSelected(Dream dream);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mCallbacks = (Callbacks) context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallbacks = null;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,12 +88,21 @@ public class DreamListFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.new_dream:
                 Dream dream = new Dream();
+                //Original
+                //DreamLab.getInstance(getActivity()).addDream(dream);
+
                 // Don't add Dream to DB here, otherwise dream will still get added to the db even
                 // if you hit back
-                //DreamLab.getInstance(getActivity()).addDream(dream);
-                Intent intent = DreamActivity
-                        .newIntent(getActivity(), dream.getId());
-                startActivity(intent);
+                //Modified
+//                Intent intent = DreamActivity
+//                        .newIntent(getActivity(), dream.getId());
+//                startActivity(intent);
+
+                //Modified again, this time for using Callbacks
+                //This may break the previous modification
+                updateUI();
+                mCallbacks.onDreamSelected(dream);
+
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -82,7 +110,7 @@ public class DreamListFragment extends Fragment {
 
     }
 
-    private void updateUI() {
+    public void updateUI() {
 
         mDreamLab = DreamLab.getInstance(getActivity());
         List<Dream> dreams = mDreamLab.getDreams();
@@ -96,5 +124,9 @@ public class DreamListFragment extends Fragment {
             mDreamAdapter.notifyDataSetChanged();
         }
 
+    }
+
+    public Callbacks getCallbacks() {
+        return mCallbacks;
     }
 }
