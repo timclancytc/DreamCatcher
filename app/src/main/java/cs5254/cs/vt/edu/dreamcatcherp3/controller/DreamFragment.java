@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -28,14 +26,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import java.io.File;
-import java.text.DateFormat;
 import java.util.List;
 import java.util.UUID;
 
@@ -44,7 +40,6 @@ import cs5254.cs.vt.edu.dreamcatcherp3.model.Dream;
 import cs5254.cs.vt.edu.dreamcatcherp3.model.DreamEntry;
 import cs5254.cs.vt.edu.dreamcatcherp3.model.DreamLab;
 import cs5254.cs.vt.edu.dreamcatcherp3.model.DreamEntryLab;
-import cs5254.cs.vt.edu.dreamcatcherp3.view.DreamAdapter;
 import cs5254.cs.vt.edu.dreamcatcherp3.view.EntryAdapter;
 
 public class DreamFragment extends Fragment {
@@ -138,6 +133,23 @@ public class DreamFragment extends Fragment {
                 i.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.dream_share_subject));
                 i = Intent.createChooser(i, getString(R.string.dream_share_send));
                 startActivity(i);
+            case R.id.photograph_dream:
+                final Intent captureImage = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                Uri uri = FileProvider.getUriForFile(getActivity(),
+                        "cs5254.cs.vt.edu.dreamcatcherp3.fileprovider",
+                        mPhotoFile);
+                captureImage.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+
+                List<ResolveInfo> cameraActivities = getActivity()
+                        .getPackageManager().queryIntentActivities(captureImage,
+                                PackageManager.MATCH_DEFAULT_ONLY);
+
+                for (ResolveInfo activity : cameraActivities) {
+                    getActivity().grantUriPermission(activity.activityInfo.packageName,
+                            uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                }
+
+                startActivityForResult(captureImage, REQUEST_PHOTO);
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -229,40 +241,38 @@ public class DreamFragment extends Fragment {
 
         PackageManager packageManager = getActivity().getPackageManager();
 
-        mPhotoButton = (ImageButton) view.findViewById(R.id.dream_camera);
-        final Intent captureImage = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        mPhotoButton = (ImageButton) view.findViewById(R.id.dream_camera);
+//        final Intent captureImage = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//
+//        boolean canTakePhoto = mPhotoFile != null &&
+//                captureImage.resolveActivity(packageManager) != null;
+//        mPhotoButton.setEnabled(canTakePhoto);
+//
+//        mPhotoButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Uri uri = FileProvider.getUriForFile(getActivity(),
+//                        "cs5254.cs.vt.edu.dreamcatcherp3.fileprovider",
+//                        mPhotoFile);
+//                captureImage.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+//
+//                List<ResolveInfo> cameraActivities = getActivity()
+//                        .getPackageManager().queryIntentActivities(captureImage,
+//                                PackageManager.MATCH_DEFAULT_ONLY);
+//
+//                for (ResolveInfo activity : cameraActivities) {
+//                    getActivity().grantUriPermission(activity.activityInfo.packageName,
+//                            uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+//                }
+//
+//                startActivityForResult(captureImage, REQUEST_PHOTO);
+//            }
+//        });
 
-        boolean canTakePhoto = mPhotoFile != null &&
-                captureImage.resolveActivity(packageManager) != null;
-        mPhotoButton.setEnabled(canTakePhoto);
 
-        mPhotoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Uri uri = FileProvider.getUriForFile(getActivity(),
-                        "cs5254.cs.vt.edu.dreamcatcherp3.fileprovider",
-                        mPhotoFile);
-                captureImage.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-
-                List<ResolveInfo> cameraActivities = getActivity()
-                        .getPackageManager().queryIntentActivities(captureImage,
-                                PackageManager.MATCH_DEFAULT_ONLY);
-
-                for (ResolveInfo activity : cameraActivities) {
-                    getActivity().grantUriPermission(activity.activityInfo.packageName,
-                            uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-                }
-
-                startActivityForResult(captureImage, REQUEST_PHOTO);
-            }
-        });
-
-
-        mPhotoView = (ImageView) view.findViewById(R.id.dream_photo);
-        Log.d("Photo Dialog", "DreamFragment.onCreatView before mPhotoView setOnClickListener");
+        mPhotoView = view.findViewById(R.id.dream_photo);
         mPhotoView.setOnClickListener(
                 v -> {
-                    Log.d("Photo Dialog", "DreamFragment.onCreatView mPhotoView setOnClickListener");
                     if (mPhotoFile == null || !mPhotoFile.exists()) {
                         return;
                     }
@@ -272,7 +282,6 @@ public class DreamFragment extends Fragment {
                 });
 
         updatePhotoView();
-
         updateUI();
 
         return view;
@@ -287,7 +296,8 @@ public class DreamFragment extends Fragment {
                     AddDreamEntryFragment.EXTRA_COMMENT);
             mDream.addComment(comment);
             updateDream();
-            refreshEntryButtons();
+            updateUI();
+            //refreshEntryButtons();
         } else if (requestCode == REQUEST_PHOTO) {
              Uri uri = FileProvider.getUriForFile(getActivity(),
                     "cs5254.cs.vt.edu.dreamcatcherp3.fileprovider",
@@ -329,6 +339,14 @@ public class DreamFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.fragment_dream, menu);
+
+        PackageManager packageManager = getActivity().getPackageManager();
+        final Intent captureImage = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        boolean canTakePhoto = mPhotoFile != null &&
+                captureImage.resolveActivity(packageManager) != null;
+
+        menu.findItem(R.id.photograph_dream).setEnabled(canTakePhoto);
     }
 
 
@@ -343,7 +361,7 @@ public class DreamFragment extends Fragment {
         refreshCheckboxEnabled();
 
         List<DreamEntry> entries = mDream.getDreamEntries();
-        refreshEntryButtons();
+        //refreshEntryButtons();
         updateUI();
 
 //        for (DreamEntry e : entries) {
@@ -362,34 +380,34 @@ public class DreamFragment extends Fragment {
         }
     }
 
-    private void refreshEntryButtons() {
-//        refreshEntryButton(mEntryButton0, 0);
-//        refreshEntryButton(mEntryButton1, 1);
-//        refreshEntryButton(mEntryButton2, 2);
-//        refreshEntryButton(mEntryButton3, 3);
-//        refreshEntryButton(mEntryButton4, 4);
+//    private void refreshEntryButtons() {
+////        refreshEntryButton(mEntryButton0, 0);
+////        refreshEntryButton(mEntryButton1, 1);
+////        refreshEntryButton(mEntryButton2, 2);
+////        refreshEntryButton(mEntryButton3, 3);
+////        refreshEntryButton(mEntryButton4, 4);
+//
+//        //TODO implement with Recycler View
+//    }
 
-        //TODO implement with Recycler View
-    }
-
-    private void refreshEntryButton(Button button, int position) {
-        // position should not be greater than the last position
-        int lastPosition = mDream.getDreamEntries().size() - 1;
-        if (position > lastPosition) {
-            button.setVisibility(View.GONE);
-            return;
-        }
-
-        button.setVisibility(View.VISIBLE);
-        DreamEntry entry = mDream.getDreamEntries().get(position);
-
-        //Only show the 5 most recent dream entries
-        if (mDream.getDreamEntries().size() > 5)
-        {
-            int newPosition = mDream.getDreamEntries().size() - 5 + position;
-            entry = mDream.getDreamEntries().get(newPosition);
-        }
-    }
+//    private void refreshEntryButton(Button button, int position) {
+//        // position should not be greater than the last position
+//        int lastPosition = mDream.getDreamEntries().size() - 1;
+//        if (position > lastPosition) {
+//            button.setVisibility(View.GONE);
+//            return;
+//        }
+//
+//        button.setVisibility(View.VISIBLE);
+//        DreamEntry entry = mDream.getDreamEntries().get(position);
+//
+//        //Only show the 5 most recent dream entries
+//        if (mDream.getDreamEntries().size() > 5)
+//        {
+//            int newPosition = mDream.getDreamEntries().size() - 5 + position;
+//            entry = mDream.getDreamEntries().get(newPosition);
+//        }
+//    }
 
     private String getDreamShare() {
         String dateFormat = "EEE, MMM dd";
